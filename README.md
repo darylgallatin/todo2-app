@@ -1,5 +1,8 @@
 # 📝 Todo2 App
 
+[🎮 **Play the Live Demo on GitHub Pages**](https://darylgallatin.github.io/todo2-app/)  
+Color scheme my be better with Chrome instead of  Firefox
+
 A simple, clean Todo List application built with **React** and **Vite**, featuring:
 
 - ➕ Add, ✏️ Update, ✅ Complete, and ❌ Delete todos
