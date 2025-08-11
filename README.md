@@ -45,10 +45,13 @@ I added:
 
 
 2. **Install dependencies:**:
-npm install
+   ```bash
+   npm install
 
 3. **Start the development server: **:
-npm run dev
+   ```bash
+   npm run dev
 
 4. **Open your browser and go to:**:
-http://localhost:5173
+   ```bash
+   http://localhost:5173
