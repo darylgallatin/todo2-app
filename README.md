@@ -6,7 +6,6 @@ A simple, clean Todo List application built with **React** and **Vite**, featuri
 - 📂 Tab filtering between **Open** and **Completed**
 - 💾 Data persistence using **localStorage**
 - 🔊 Menu sounds for interactions
--    And  Button sounds too
 - 🎵 Background music (starts on first click anywhere)
 - 🌈 Fun animated background gradient
 
