@@ -115,3 +115,17 @@ p {
     font-size: 1em;
   }
 }
+/* FINAL background override — index.css loads last, so this wins */
+html, body, #root {
+  min-height: 100%;
+  background: linear-gradient(120deg, #3a33b9, #f5f3ff, #364db2);
+  background-size: 200% 200%;
+  background-attachment: fixed;
+  animation: bgShift 18s ease-in-out infinite;
+}
+
+@keyframes bgShift {
+  0%   { background-position:   0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position:   0% 50%; }
+}

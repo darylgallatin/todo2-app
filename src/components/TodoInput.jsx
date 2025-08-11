@@ -1,23 +1,23 @@
+// TodoInput.jsx
+// Controlled input + add button (plays a small sound when adding)
 import { useState, useRef, useEffect } from 'react';
-
 import addSound from './Item Pickup.mp3';
 
-
 export function TodoInput({ handleAddTodo }) {
-  // Use local state to track input for new todos.
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef(null);
 
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
+  // Focus the input on mount
+  useEffect(() => { if (inputRef.current) inputRef.current.focus(); }, []);
 
+  const play = (src) => new Audio(src).play();
 
-  // Helper function to play the add sound.
-  const playAddSound = () => {
-    new Audio(addSound).play();
+  const add = () => {
+    const trimmed = inputValue.trim();
+    if (!trimmed) return;
+    play(addSound);
+    handleAddTodo(trimmed);
+    setInputValue('');
   };
 
   return (
@@ -25,19 +25,11 @@ export function TodoInput({ handleAddTodo }) {
       <input
         ref={inputRef}
         value={inputValue}
-        onChange={(e) => {
-         
-          setInputValue(e.target.value);
-        }}
+        onChange={(e) => setInputValue(e.target.value)}
         placeholder="Add task"
+        onKeyDown={(e) => { if (e.key === 'Enter') add(); }}
       />
-      <button onClick={() => {
-        if (!inputValue) { return; }
-        playAddSound();
-        handleAddTodo(inputValue);
-        
-        setInputValue(''); // Clear input after adding
-      }}>
+      <button onClick={add}>
         <i className="fa-solid fa-plus"></i>
       </button>
     </div>

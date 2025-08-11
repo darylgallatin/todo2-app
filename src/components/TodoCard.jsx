@@ -1,41 +1,27 @@
+// TodoCard.jsx
+// Renders a single todo with Done / Edit / Delete actions + small UX sounds
 import { useState, useRef, useEffect } from 'react';
-// Import sound files
 import doneSound from './menu_accept.ogg';
 import editSound from './menu_change.ogg';
 import deleteSound from './menu_cancel.ogg';
 
-export function TodoCard(props) {
-  // Destructure props
-  const { todo, handleDeleteTodo, todoIndex, handleCompleteTodo, handleUpdateTodo } = props;
-  // Local state for editing
+export function TodoCard({ todo, todoIndex, handleCompleteTodo, handleUpdateTodo, handleDeleteTodo }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editedInput, setEditedInput] = useState(todo.input);
   const inputRef = useRef(null);
 
-  // Auto-focus when editing starts
+  // Auto-focus when entering edit mode
   useEffect(() => {
-    if (isEditing && inputRef.current) {
-      inputRef.current.focus();
-    }
+    if (isEditing && inputRef.current) inputRef.current.focus();
   }, [isEditing]);
 
-  // Play sound helper functions
-  const playDoneSound = () => {
-    new Audio(doneSound).play();
-  };
+  const play = (src) => new Audio(src).play();
 
-  const playEditSound = () => {
-    new Audio(editSound).play();
-  };
-
-  const playDeleteSound = () => {
-    new Audio(deleteSound).play();
-  };
-
-  // Save the edit and exit edit mode
+  // Save edits (Enter/blur), cancel with Esc
   const saveEdit = () => {
-    if (editedInput !== todo.input) {
-      handleUpdateTodo(todoIndex, editedInput);
+    const trimmed = editedInput.trim();
+    if (trimmed && trimmed !== todo.input) {
+      handleUpdateTodo(todoIndex, trimmed);
     }
     setIsEditing(false);
   };
@@ -49,33 +35,39 @@ export function TodoCard(props) {
           value={editedInput}
           onChange={(e) => setEditedInput(e.target.value)}
           onBlur={saveEdit}
-          onKeyDown={(e) => { if (e.key === 'Enter') saveEdit(); }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') saveEdit();
+            if (e.key === 'Escape') setIsEditing(false);
+          }}
+          aria-label="Edit todo text"
         />
       ) : (
         <p>{todo.input}</p>
       )}
+
       <div className="todo-buttons">
-        <button 
-          onClick={() => {
-            playDoneSound(); // Play sound before completing
-            handleCompleteTodo(todoIndex);
-          }}
-          disabled={todo.complete}>
+        <button
+          aria-label={todo.complete ? "Todo already completed" : "Mark todo as done"}
+          onClick={() => { play(doneSound); handleCompleteTodo(todoIndex); }}
+          disabled={todo.complete}
+          title={todo.complete ? "Completed" : "Mark as done"}
+        >
           <h6>Done</h6>
         </button>
-        <button 
-          onClick={() => {
-            playEditSound(); // Play sound when editing starts
-            setEditedInput(todo.input);
-            setIsEditing(true);
-          }}>
+
+        <button
+          aria-label="Edit todo"
+          onClick={() => { play(editSound); setEditedInput(todo.input); setIsEditing(true); }}
+          title="Edit"
+        >
           <h6>Edit</h6>
         </button>
-        <button 
-          onClick={() => {
-            playDeleteSound(); // Play sound when deleting
-            handleDeleteTodo(todoIndex);
-          }}>
+
+        <button
+          aria-label="Delete todo"
+          onClick={() => { play(deleteSound); handleDeleteTodo(todoIndex); }}
+          title="Delete"
+        >
           <h6>Delete</h6>
         </button>
       </div>
